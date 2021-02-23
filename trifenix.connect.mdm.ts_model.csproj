@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+   <ItemGroup>
+    <None Include="images\logo.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>  
+    <PackageIcon>logo.png</PackageIcon>
+    <Company>Trifenix</Company>
+    <Product>mdm-ts</Product>
+    <PackageTags>https://github.com/trifenix/mdm/</PackageTags>
+    <RootNamespace>trifenix</RootNamespace>
+    <RepositoryUrl>https://github.com/trifenix/mdm/</RepositoryUrl> 
+    <nugetUrl>https://www.nuget.org/packages/trifenix.connect.mdm/</nugetUrl>
+    <devopsUrl><![CDATA[https://dev.azure.com/trifenix-connect/base-public-components/_packaging?_a=package&feed=trifenix&package=trifenix.connect.mdm&protocolType=NuGet]]></devopsUrl>
+    <releaseBadgeUrl>https://feeds.dev.azure.com/trifenix-connect/_apis/public/Packaging/Feeds/4227dc51-6e8c-42c1-97ca-a33e6615385d/Packages/2b2a691b-0198-4745-9b09-12fee3db522c/Badge</releaseBadgeUrl>
+    <id>trifenix-mdm-ts</id>    
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <title>MdM-ts</title>
+    <authors>Trifenix</authors>
+    <owners>trifenix</owners>
+    <projectUrl>https://connect.trifenix.io/nuget-packages/trifenix-mdm</projectUrl>
+    <iconUrl>https://logos.trifenix.io/logo.48x48.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Librerías creadas en .net para typescript, pero que aún no tienen uso en C#</description>
+    <releaseNotes>Pendiente</releaseNotes>
+    <copyright>MIT Open Source</copyright>
+    <IsPackable>true</IsPackable>
+    <tags>lowcode search devops</tags>
+    <PackageType>Dependency</PackageType>
+    <summary>Librerías creadas en .net para typescript, pero que aún no tienen uso en C#.</summary>
+    
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage
+    </TargetsForTfmSpecificBuildOutput>
+    <DocumentationFile>trifenix.connect.mdm.ts_model.xml</DocumentationFile>
+   
+  </PropertyGroup>
+  
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="trifenix.connect.mdm" Version="0.8.116" />
+    
+  </ItemGroup>
+
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+    <ItemGroup>
+      <!-- Filter out unnecessary files -->
+      <_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('PrivateAssets', 'All'))" />
+      
+    </ItemGroup>
+
+    <!-- Print batches for debug purposes -->
+    <Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''" />
+
+    <ItemGroup>
+      <!-- Add file to package with consideration of sub folder. If empty, the root folder is chosen. -->
+      <BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
