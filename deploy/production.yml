@@ -35,7 +35,7 @@ steps:
         $currentVersion = trifenix-versions update $(trifenix-versions) --token $(script-token) --user $(user) --email $(email) --branch $(branch) --name $(name-project) --ktype nuget --build $(Build.BuildId)        
         $setVersion = '##vso[task.setvariable variable=version;]' + $currentVersion
         Write-Host $setVersion
-        echo $(version)
+        
     displayName: generando variable version con TRIFENIX VERSIONS
 
 
@@ -57,6 +57,7 @@ steps:
   - task: CmdLine@2
     inputs:
       script: |
+        echo $(version)
         dotnet pack $(name-project).csproj --configuration $(BuildConfiguration) /p:Version=$(version) --output $(Build.ArtifactStagingDirectory)
     displayName: dotnet pack
     
